@@ -22,8 +22,8 @@ SQUARE_SIZE = 80  # pixel
 WINDOW_SIZE = BOARD_SIZE * SQUARE_SIZE
 
 # Đồ họa
-WHITE_COLOR = (240, 217, 181)
-GRAY_COLOR = (181, 136, 99)
+WHITE_COLOR = (255, 255, 255)  # Trắng tinh
+GRAY_COLOR = (200, 200, 200)   # Xám đậm (để nhìn rõ quân đen)
 
 # Đánh giá vật liệu
 MATERIAL = {
@@ -130,7 +130,14 @@ def load_piece_images():
                     img = pygame.image.load(folder + name + ".svg")
                 except Exception:
                     continue
-            piece_images[name] = pygame.transform.scale(img, (SQUARE_SIZE, SQUARE_SIZE))
+            img = pygame.transform.scale(img, (SQUARE_SIZE, SQUARE_SIZE))
+            # Quân trắng (in hoa): màu xám nhạt (để nhìn rõ trên ô trắng), quân đen (in thường): màu đen, giữ nguyên độ trong suốt
+            for x in range(img.get_width()):
+                for y in range(img.get_height()):
+                    r, g, b, a = img.get_at((x, y))
+                    new_color = (160, 160, 160, a) if name.isupper() else (0, 0, 0, a)
+                    img.set_at((x, y), new_color)
+            piece_images[name] = img
 load_piece_images()
 
 # ------------------------------------------------------------
@@ -502,7 +509,18 @@ def draw_score(screen, score):
     text = f"Score: {score}"
     color = (0,255,0) if score >= 0 else (255,0,0)
     img = font.render(text, True, color)
-    screen.blit(img, (10,10))
+    
+    # Tạo một hình chữ nhật màu đen bán trong suốt làm nền
+    bg_rect = pygame.Rect(5, 5, img.get_width() + 20, img.get_height() + 10)
+    bg_surface = pygame.Surface((bg_rect.width, bg_rect.height), pygame.SRCALPHA)
+    bg_surface.fill((0, 0, 0, 180)) # Màu đen, độ mờ 180/255
+    
+    screen.blit(bg_surface, (bg_rect.x, bg_rect.y))
+    # Vẽ viền trắng mỏng xung quanh nền đen để dễ nhìn hơn
+    pygame.draw.rect(screen, (255, 255, 255), bg_rect, 2) 
+    
+    # Vẽ chữ lên trên nền
+    screen.blit(img, (bg_rect.x + 10, bg_rect.y + 5))
 
 # ------------------------------------------------------------
 # Main loop

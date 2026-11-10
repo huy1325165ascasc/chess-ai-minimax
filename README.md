@@ -123,3 +123,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Chess piece images from [public domain sources](https://en.wikipedia.org/wiki/Chess_piece)
 - Inspired by various open-source chess implementations
+
+python chess_gui.py
