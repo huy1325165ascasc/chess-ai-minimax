@@ -1,18 +1,4 @@
-# Caches
-.cache
-.caches
-__pycache__
-
-# Environments and environment variables
-.venv/
-.env/
-
-# Secrets
-.env
-
-# IDE
-.vscode/
-.idea/
-.pyd
-.windsurfrules
-.cursorrules
+﻿__pycache__/
+*.pyc
+venv/
+game_moves.txt
